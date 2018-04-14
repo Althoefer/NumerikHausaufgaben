@@ -103,8 +103,27 @@ if __name__ == "__main__":
         print(integ_vec(func2, 1, 2, n))
 
 # Exercise 5
-def test():
-    pass
+# from math import sqrt # already imported above
+
+def sqrt1(k, x, x0):
+    y = a = sqrt(x0) # pretend like we know sqrt(x0)
+    for i in range(1, k + 1):
+        a = (3 / (2 * i) - 1) * (x / x0 - 1) * a
+        y = y + a
+    return y
+
+def sqrt2(k, x, x0):
+    y = sqrt(x0) # pretend like we know sqrt(x0)
+    for i in range(1, k + 1):
+        y = 0.5 * (y + x / y)
+    return y
 
 if __name__ == "__main__":
-    pass
+    k = 10
+    x = 2
+    print("Testing sqrt({}) = {}".format(x, sqrt(x)))
+    for x0 in [1, 4]:
+        appr = sqrt1(k, x, x0)
+        print("Taylor: x0 = {}: {} ==> diff: {}".format(x0, appr, abs(appr - sqrt(x))))
+        appr = sqrt2(k, x, x0)
+        print("Heron: x0 = {}: {} ==> diff: {}".format(x0, appr, abs(appr - sqrt(x))))
