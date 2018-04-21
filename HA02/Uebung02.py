@@ -42,11 +42,11 @@ if __name__ == '__main__':
             [2, 1, 2, 0],
             [4, 4, 0, 0],
             [2, 3, 1, 0],
-    ])
+    ], dtype = np.float64)
     LU, p = zerlegung(A)
     rhs = [
-        np.array([3, 5, 4, 5]),
-        np.array([4, 10, 12, 11]),
+        np.array([3, 5, 4, 5], dtype = np.float64),
+        np.array([4, 10, 12, 11], dtype = np.float64),
     ]
     for b in rhs:
         print(f'input: {b}')
@@ -57,8 +57,8 @@ if __name__ == '__main__':
 
     # accuracy tests
     for n in [5, 10, 15, 20]:
-        A = np.array([[1 / (i + j - 1) for j in range(1, n + 1)] for i in range(1, n + 1)])
-        b = np.array([1 / (i + 1) for i in range(1, n + 1)])
+        A = np.array([[1 / (i + j - 1) for j in range(1, n + 1)] for i in range(1, n + 1)], dtype = np.float64)
+        b = np.array([1 / (i + 1) for i in range(1, n + 1)], dtype = np.float64)
         LU, p = zerlegung(A)
         print(f'input: {b}')
         b = permutation(p, b)
@@ -66,8 +66,50 @@ if __name__ == '__main__':
         x = rueckwaerts(LU, b)
         print(f'solution: {x}')
 
+# Exercise 2
+def sherman_morris(LU, p, u, v, b_dach):
+    # calculate z from LGS: A * z = u
+    u = permutation(p, u)
+    u = vorwaerts(LU, u)
+    z = rueckwaerts(LU, u)
+    
+    # calculate alpha
+    try:
+        alpha = 1 / (1 + np.dot(v, z))
+    except ZeroDivisionError:
+        print('Matrix A_dach is not regular')
+        return None
+    
+    # calculate z_dach from LGS: A * z_dach = b_dach
+    b_dach = permutation(p, b_dach)
+    b_dach = vorwaerts(LU, b_dach)
+    z_dach = rueckwaerts(LU, b_dach)
+    
+    # calculate final solution x_dach
+    x_dach = z_dach - alpha * np.dot(v, z_dach) * z
+    return x_dach
+
+if __name__ == '__main__':
+    print('Sherman-Morris')
+
+    A = np.array([
+            [0, 0, 0, 1],
+            [2, 1, 2, 0],
+            [4, 4, 0, 0],
+            [2, 3, 1, 0],
+    ], dtype = np.float64)
+    u = np.array([0, 1, 2, 3], dtype = np.float64)
+    v = np.array([0, 0, 0, 1], dtype = np.float64)
+    b_dach = np.array([3, 5, 4, 5], dtype = np.float64)
+
+    # we already have LU (and p) for A
+    LU, p = zerlegung(A)
+
+    print(f'input: u: {u} v: {v}')
+    x_dach = sherman_morris(LU, p, u, v, b_dach)
+    print(f'solution: {x_dach}')
+
 # Exercise 3
-import numpy as np
 from math import sqrt
 
 def cholesky(A):
@@ -101,9 +143,9 @@ if __name__ == '__main__':
         A = np.array([
                 [2.] * n, # main diagonal
                 [-1.] * n, # one of adjacent symmetric diagonals
-        ])
+        ], dtype = np.float64)
         L = cholesky(A)
-        b = np.array([-1 / (n + 1) ** 2 for _ in range(n)])
+        b = np.array([-1 / (n + 1) ** 2 for _ in range(n)], dtype = np.float64)
         print(f'input: {b}')
         b = vorwaerts(L, b)
         x = rueckwaerts(L, b)
