@@ -35,6 +35,7 @@ def rueckwaerts(LU, x):
     return x
 
 if __name__ == '__main__':
+    print('LU')
     # basic tests
     A = np.array([
             [0, 0, 0, 1],
@@ -63,4 +64,47 @@ if __name__ == '__main__':
         b = permutation(p, b)
         b = vorwaerts(LU, b)
         x = rueckwaerts(LU, b)
+        print(f'solution: {x}')
+
+# Exercise 3
+import numpy as np
+from math import sqrt
+
+def cholesky(A):
+    ncols = len(A[0, :])
+    for i in range(ncols):
+        A[0, i] = sqrt(A[0, i])
+        A[1, i] = A[1, i] / A[0, i]
+        if i + 1 < ncols:
+            A[0, i + 1] = A[0, i + 1] - A[1, i] ** 2
+    return A
+
+def vorwaerts(L, x):
+    ncols = len(A[0, :])
+    for i in range(ncols):
+        x[i] = x[i] / A[0, i]
+        if i + 1 < ncols:
+            x[i + 1] = x[i + 1] - x[i] * A[1, i]
+    return x
+
+def rueckwaerts(L, x):
+    for i in reversed(range(len(A[0, :]))):
+        x[i] = x[i] / A[0, i]
+        if i - 1 >= 0:
+            x[i - 1] = x[i - 1] - x[i] * A[1, i - 1]
+    return x
+
+if __name__ == '__main__':
+    print('Cholesky')
+    for n in [4, 100, 1000, 10000]:
+        # last -1 added for symmetry
+        A = np.array([
+                [2.] * n, # main diagonal
+                [-1.] * n, # one of adjacent symmetric diagonals
+        ])
+        L = cholesky(A)
+        b = np.array([-1 / (n + 1) ** 2 for _ in range(n)])
+        print(f'input: {b}')
+        b = vorwaerts(L, b)
+        x = rueckwaerts(L, b)
         print(f'solution: {x}')
