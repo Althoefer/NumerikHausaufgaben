@@ -35,7 +35,10 @@ def rueckwaerts(LU, x):
     return x
 
 if __name__ == '__main__':
+    print('-' * 30)
     print('LU')
+    print('-' * 30)
+    
     # basic tests
     A = np.array([
             [0, 0, 0, 1],
@@ -65,6 +68,7 @@ if __name__ == '__main__':
         b = vorwaerts(LU, b)
         x = rueckwaerts(LU, b)
         print(f'solution: {x}')
+    print('-' * 30)
 
 # Exercise 2
 def sherman_morris(LU, p, u, v, b_dach):
@@ -90,7 +94,9 @@ def sherman_morris(LU, p, u, v, b_dach):
     return x_dach
 
 if __name__ == '__main__':
+    print('-' * 30)
     print('Sherman-Morris')
+    print('-' * 30)
 
     A = np.array([
             [0, 0, 0, 1],
@@ -108,6 +114,7 @@ if __name__ == '__main__':
     print(f'input: u: {u} v: {v}')
     x_dach = sherman_morris(LU, p, u, v, b_dach)
     print(f'solution: {x_dach}')
+    print('-' * 30)
 
 # Exercise 3
 from math import sqrt
@@ -137,7 +144,9 @@ def rueckwaerts(L, x):
     return x
 
 if __name__ == '__main__':
+    print('-' * 30)
     print('Cholesky')
+    print('-' * 30)
     for n in [4, 100, 1000, 10000]:
         # last -1 added for symmetry
         A = np.array([
@@ -150,3 +159,4 @@ if __name__ == '__main__':
         b = vorwaerts(L, b)
         x = rueckwaerts(L, b)
         print(f'solution: {x}')
+    print('-' * 30)
