@@ -98,3 +98,39 @@ if __name__ == '__main__':
             print(f'solution with {zerlegung.__name__}: {x}')
         print(f'exact solution: {np.array([1 for _ in range(n)], dtype=np.float64)}')
         print('-' * 30)
+
+# Exercise 5
+import sys
+
+def prager_oettli(A, b, x):
+    r = b - np.dot(A, x)
+    s = np.dot(abs(A), abs(x)) + abs(b)
+    epsilon = np.amax(abs(r) / s)
+    return epsilon
+
+if __name__ == '__main__':
+    print('-' * 30)
+    print('Prager Oettli')
+    print('-' * 30)
+    
+    deltas = [10 ** -8, 10 ** -10, 10 ** -12]
+    for delta in deltas:
+        A = np.array([
+                [3, 2, 1],
+                [2, 2 * delta, 2 * delta],
+                [1, 2 * delta, -1 * delta],
+                ], dtype = np.float64)
+        b = np.array([3 + 3 * delta, 6 * delta, 2 * delta], dtype = np.float64)
+
+        LU, p = zerlegung_mit_pivot(A)
+        y = permutation(p, b)
+        y = vorwaerts(LU, y)
+        x = rueckwaerts(LU, y)
+        print('Verfahren: Ergebnis für x ==> Prager-Oettli-Epsilon')
+        print(f'self LU-Pivot: {x} ==> {prager_oettli(A, b, x)}')
+        x = np.linalg.solve(A, b)
+        print(f'np.linalg.solve: {x} ==> {prager_oettli(A, b, x)}')
+        x = np.array([delta, 1, 1], dtype=np.float64)
+        print(f'exact solution: {x} ==> {prager_oettli(A, b, x)}')
+        print(f'Compare to: cond_inf(A) * machine_epsilon = {np.linalg.cond(A, p = np.inf) * 0.5 * sys.float_info.epsilon}')
+        print('-' * 30)
