@@ -60,3 +60,46 @@ if __name__ == '__main__':
     x = permutation(p, b)
     print(f'solution: {x}')
     print('-' * 30)
+
+
+# Exercise 2
+def hager_approximation(LU, p):
+    x = np.array([1 / len(LU) for _ in range(len(LU))], dtype=np.float64)
+
+    while True:
+        temp = vorwaerts(LU, x)
+        temp = rueckwaerts(LU, temp)
+        y = permutation(p, temp)
+
+        e = np.sign(y)
+
+        temp = vorwaerts(LU, e)
+        temp = rueckwaerts(LU, temp)
+        z = permutation(p, temp)
+
+        if np.linalg.norm(z, ord=np.inf) <= np.dot(np.transpose(z), x):
+            return np.linalg.norm(y, ord=1)
+        j = np.argmax(np.abs(z))
+        x = np.array([0 if i != j else 1 for i in range(len(LU))], dtype=np.float64)
+
+
+if __name__ == '__main__':
+    print('-' * 30)
+    print('Exercise 2')
+    print('-' * 30)
+
+    deltas = [10 ** -8, 10 ** -10, 10 ** -12]
+    for delta in deltas:
+        A = np.array([
+            [3, 2, 1],
+            [2, 2 * delta, 2 * delta],
+            [1, 2 * delta, -1 * delta],
+        ], dtype=np.float64)
+        LU, p = zerlegung_mit_pivot(A)
+
+        hager = hager_approximation(LU, p) * np.linalg.norm(A, ord=np.inf)
+        numpy_cond = np.linalg.cond(A, p=np.inf)
+        print(f'hager approximation: {hager}')
+        print(f'numpy.linalg.cond(): {numpy_cond}')
+        print(f'difference: {np.abs(numpy_cond - hager)}')
+        print('-' * 30)
