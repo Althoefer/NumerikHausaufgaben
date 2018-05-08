@@ -49,25 +49,27 @@ def rueckwaerts(LU, x):
 def householder(A):
     QR = np.copy(A)
     diagonal = np.array([], dtype=np.float64)
-    for row in range(len(QR) - 1):
+    for row in range(len(QR)):
         a = QR[row:, row]
+        d = -1 * np.sign(a[0]) * np.linalg.norm(a)
         v = a + np.sign(a[0]) * np.linalg.norm(a) * np.array([1] + [0 for _ in range(len(a) - 1)], dtype=np.float64)
-        Q = np.eye(len(a), dtype=np.float64) - (2 / np.dot(v, v)) * np.outer(v, np.transpose(v))
+        v[0] = a[0] - d
+        Q = np.eye(len(a), dtype=np.float64) + (1 / (v[0] * d)) * np.outer(v, np.transpose(v))
         QR[row:, row:] = np.dot(Q, QR[row:, row:])
-        diagonal = np.append(diagonal, QR[row, row])
+        diagonal = np.append(diagonal, d)
         QR[row:, row] = v
-    diagonal = np.append(diagonal, QR[-1, -1])
     return QR, diagonal
 
 
 def reconstruct_q(QR, diagonal, b):
     Q_total = np.eye(len(QR), dtype=np.float64)
-    for row in range(len(QR) - 1):
+    for row in range(len(QR)):
         Q = np.eye(len(QR), dtype=np.float64)
         v = QR[row:, row]
-        Q[row:, row:] = Q[row:, row:] - (2 / np.dot(v, v)) * np.outer(v, np.transpose(v))
+        Q[row:, row:] = Q[row:, row:] + (1 / (v[0] * diagonal[row])) * np.outer(v, np.transpose(v))
         Q_total = np.dot(Q, Q_total)
     return np.dot(Q_total, b)
+
 
 def solve_Ry(QR, y, diagonal):
     x = np.copy(y)
@@ -75,6 +77,7 @@ def solve_Ry(QR, y, diagonal):
         x[row] = x[row] / diagonal[row]
         x[:row] = x[:row] - x[row] * QR[:row, row]
     return x
+
 
 # End Householder
 ####################
@@ -116,23 +119,23 @@ def main():
     print('-' * 30)
     print('Householder advanced tests')
     print('-' * 30)
-    
+
     dims = [40, 50, 60]
     for n in dims:
         print(f'dimension: {n}')
-        
+
         A = np.eye(n, dtype=np.float64)
         A[:, -1] = np.array([1 for _ in range(n)], dtype=np.float64)
         for i in range(n):
             A[i + 1:, i] = -1
-        
+
         # zerlegungen
         QR, diagonal = householder(A)
         LU, p = zerlegung_mit_pivot(A)
-        
+
         b = np.array([3 - i for i in range(1, n)] + [2 - n], dtype=np.float64)
         print(f'input: {b}')
-        
+
         # solve LGS
         y = permutation(p, b)
         y = vorwaerts(LU, y)
