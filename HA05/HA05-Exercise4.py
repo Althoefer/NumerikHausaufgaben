@@ -100,7 +100,7 @@ if __name__ == '__main__':
     plt.ylabel('value of eigenvalue')
     plt.show()
     plt.clf()
-    
+
     print('eigenvectors for 4 smallest eigenvalues:')
     for i in range(4):
         print('plot:')
@@ -109,8 +109,11 @@ if __name__ == '__main__':
         plt.clf()
 
         print('animation:')
-        animev(Q[:, i])()
+        anim = animev(Q[:, i])()
+        filename = f'animation{i}.html'
+        anim.save(filename)
         plt.show()
         plt.clf()
+        print(f'saved to {filename} to look at animation in a browser')
     
     print('-' * 30)
