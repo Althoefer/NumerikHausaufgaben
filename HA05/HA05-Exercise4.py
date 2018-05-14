@@ -110,10 +110,7 @@ if __name__ == '__main__':
 
         print('animation:')
         anim = animev(Q[:, i])()
-        filename = f'animation{i}.html'
-        anim.save(filename)
         plt.show()
         plt.clf()
-        print(f'saved to {filename} to look at animation in a browser')
     
     print('-' * 30)
