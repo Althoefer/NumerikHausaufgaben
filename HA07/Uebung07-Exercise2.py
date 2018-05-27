@@ -128,6 +128,7 @@ if __name__ == '__main__':
     plt.legend(legend)
     plt.xlabel('x')
     plt.ylabel('y')
+    # \binom as workaround for missing vectors in matplotlib's mathtext
     plt.title(r'Newton Interpolation for $\gamma(t) = \frac{1}{1 + t} \binom{\cos(3 \pi t)}{\sin(3 \pi t)}$')
     plt.grid(True)
     plt.show()
