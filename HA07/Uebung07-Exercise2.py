@@ -38,7 +38,7 @@ if __name__ == '__main__':
     p = interpolate_newton(points)
     y = p(x)
 
-    print(f'interpolating points: {points}')
+    print(f'interpolation points: {points}')
     print(f'p({x}) = {y} <= {y == solu} => {solu}')
     print('-' * 30)
 

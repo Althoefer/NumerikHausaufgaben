@@ -85,7 +85,7 @@ def interpolate_natural_spline(points):
 
 if __name__ == '__main__':
     print('-' * 30)
-    print('Newton Interpolation')
+    print('Natural Cubic Splines')
     print('-' * 30)
 
     # additional example from script
@@ -99,8 +99,8 @@ if __name__ == '__main__':
     p = interpolate_natural_spline(points)
     y = p(x)
 
-    print(f'interpolating points: {points}')
-    print(f'p({x}) = {y} <= {y == solu} => {solu}')
+    print(f'points: {points}')
+    print(f's({x}) = {y} <= {y == solu} => {solu}')
     print('-' * 30)
 
     print('a) basic tests (splines produce different result than newton interpolation)')
@@ -113,8 +113,8 @@ if __name__ == '__main__':
     p = interpolate_natural_spline(points)
     y = p(x)
 
-    print(f'interpolating points: {points}')
-    print(f'p({x}) = {y} <= {y == solu} => {solu}')
+    print(f'points: {points}')
+    print(f's({x}) = {y} <= {y == solu} => {solu}')
     print('-' * 30)
 
     print('b) advanced tests')
@@ -137,11 +137,11 @@ if __name__ == '__main__':
     legend = ['$f(x)$']
     for m, p in zip(ms, polynoms):
         plt.plot(x, [p(val) for val in x])
-        legend.append('$p_{' + str(m) + '}(x)$')
+        legend.append('$s_{' + str(m) + '}(x)$')
     plt.legend(legend)
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title(r'Newton Interpolation for $f(x) = \frac{1}{1 + x^2}$')
+    plt.title(r'Natural Cubic Splines for $f(x) = \frac{1}{1 + x^2}$')
     plt.grid(True)
     plt.show()
     print('-' * 30)
@@ -166,11 +166,11 @@ if __name__ == '__main__':
     legend = ['$f(x)$']
     for m, p in zip(ms, polynoms):
         plt.plot(x, [p(val) for val in x])
-        legend.append('$p_{' + str(m) + '}(x)$')
+        legend.append('$s_{' + str(m) + '}(x)$')
     plt.legend(legend)
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title(r'Newton Interpolation for $f(x) = \frac{1}{1 + x^2}$')
+    plt.title(r'Natural Cubic Splines for $f(x) = \frac{1}{1 + x^2}$')
     plt.grid(True)
     plt.show()
     print('-' * 30)
@@ -199,12 +199,12 @@ if __name__ == '__main__':
     legend = [r'$\gamma(t)$']
     for m, index in zip(ms, range(0, len(polynoms), 2)):
         plt.plot([polynoms[index](val) for val in x], [polynoms[index+1](val) for val in x])
-        legend.append('$p_{' + str(m) + '}(t)$')
+        legend.append('$s_{' + str(m) + '}(t)$')
     plt.legend(legend)
     plt.xlabel('x')
     plt.ylabel('y')
     # \binom as workaround for missing vectors in matplotlib's mathtext
-    plt.title(r'Newton Interpolation for $\gamma(t) = \frac{1}{1 + t} \binom{\cos(3 \pi t)}{\sin(3 \pi t)}$')
+    plt.title(r'Natural Cubic Splines for $\gamma(t) = \frac{1}{1 + t} \binom{\cos(3 \pi t)}{\sin(3 \pi t)}$')
     plt.grid(True)
     plt.show()
     print('-' * 30)
